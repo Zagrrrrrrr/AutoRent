@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Добавление автомобиля"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:textColor="@color/black"
+            android:gravity="center"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="30dp" />
+
+        <EditText
+            android:id="@+id/etBrand"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:hint="Марка"
+            android:padding="16dp"
+            android:background="@android:drawable/editbox_background"
+            android:layout_marginBottom="12dp"/>
+
+        <EditText
+            android:id="@+id/etModel"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:hint="Модель"
+            android:padding="16dp"
+            android:background="@android:drawable/editbox_background"
+            android:layout_marginBottom="12dp"/>
+
+        <EditText
+            android:id="@+id/etYear"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:hint="Год выпуска"
+            android:inputType="number"
+            android:padding="16dp"
+            android:background="@android:drawable/editbox_background"
+            android:layout_marginBottom="12dp"/>
+
+        <EditText
+            android:id="@+id/etEngineVolume"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:hint="Объем двигателя (например: 2.0)"
+            android:inputType="numberDecimal"
+            android:padding="16dp"
+            android:background="@android:drawable/editbox_background"
+            android:layout_marginBottom="12dp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Тип двигателя:"
+            android:textSize="14sp"
+            android:textColor="@color/gray_dark"
+            android:layout_marginBottom="4dp"/>
+
+        <Spinner
+            android:id="@+id/spinnerEngineType"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:background="@android:drawable/editbox_background"
+            android:layout_marginBottom="12dp"/>
+
+        <EditText
+            android:id="@+id/etPriceHour"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:hint="Цена за час ($)"
+            android:inputType="numberDecimal"
+            android:padding="16dp"
+            android:background="@android:drawable/editbox_background"
+            android:layout_marginBottom="12dp"/>
+
+        <EditText
+            android:id="@+id/etPriceDay"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:hint="Цена за сутки ($)"
+            android:inputType="numberDecimal"
+            android:padding="16dp"
+            android:background="@android:drawable/editbox_background"
+            android:layout_marginBottom="12dp"/>
+
+        <EditText
+            android:id="@+id/etPriceWeek"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:hint="Цена за неделю ($)"
+            android:inputType="numberDecimal"
+            android:padding="16dp"
+            android:background="@android:drawable/editbox_background"
+            android:layout_marginBottom="24dp"/>
+
+        <Button
+            android:id="@+id/btnSave"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:text="Добавить"
+            android:backgroundTint="@color/purple_500"
+            android:layout_marginBottom="12dp"/>
+
+        <Button
+            android:id="@+id/btnBack"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:text="Назад"
+            android:backgroundTint="@color/gray_dark"/>
+
+    </LinearLayout>
+</ScrollView>

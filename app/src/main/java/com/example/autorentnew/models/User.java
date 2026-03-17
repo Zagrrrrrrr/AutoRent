@@ -13,6 +13,7 @@ public class User {
     private String email;
     private String phone;
 
+    // Конструктор
     public User(int id, String login, String password, String role,
                 String firstName, String lastName, String middleName,
                 String birthDate, String licenseNumber, String email, String phone) {
@@ -29,6 +30,7 @@ public class User {
         this.phone = phone;
     }
 
+    // ===== ГЕТТЕРЫ =====
     public int getId() { return id; }
     public String getLogin() { return login; }
     public String getPassword() { return password; }
@@ -44,4 +46,17 @@ public class User {
     public String getFullName() {
         return lastName + " " + firstName;
     }
+
+    // ===== СЕТТЕРЫ =====
+    public void setId(int id) { this.id = id; }
+    public void setLogin(String login) { this.login = login; }
+    public void setPassword(String password) { this.password = password; }
+    public void setRole(String role) { this.role = role; }
+    public void setFirstName(String firstName) { this.firstName = firstName; }
+    public void setLastName(String lastName) { this.lastName = lastName; }
+    public void setMiddleName(String middleName) { this.middleName = middleName; }
+    public void setBirthDate(String birthDate) { this.birthDate = birthDate; }
+    public void setLicenseNumber(String licenseNumber) { this.licenseNumber = licenseNumber; }
+    public void setEmail(String email) { this.email = email; }
+    public void setPhone(String phone) { this.phone = phone; }
 }

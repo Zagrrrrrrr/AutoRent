@@ -1,8 +1,7 @@
 package com.example.autorentnew.adapters;
 
-
-
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.autorent.R;
+import com.example.autorentnew.activities.AdminEditUserActivity;
 import com.example.autorentnew.models.User;
 
 import java.util.List;
@@ -38,7 +37,9 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
     @NonNull
     @Override
     public UserViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.item_user, parent, false);
+        View view = LayoutInflater.from(context).inflate(
+                context.getResources().getIdentifier("item_user", "layout", context.getPackageName()),
+                parent, false);
         return new UserViewHolder(view);
     }
 
@@ -52,9 +53,9 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
         holder.tvEmail.setText("Email: " + user.getEmail());
 
         holder.btnEdit.setOnClickListener(v -> {
-            if (listener != null) {
-                listener.onEditClick(user);
-            }
+            Intent intent = new Intent(context, AdminEditUserActivity.class);
+            intent.putExtra("user_id", user.getId());
+            context.startActivity(intent);
         });
 
         holder.btnDelete.setOnClickListener(v -> {
@@ -76,13 +77,21 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
 
         public UserViewHolder(@NonNull View itemView) {
             super(itemView);
+
+            // Находим view через getIdentifier (без R)
             cardView = (CardView) itemView;
-            tvName = itemView.findViewById(R.id.tvName);
-            tvLogin = itemView.findViewById(R.id.tvLogin);
-            tvRole = itemView.findViewById(R.id.tvRole);
-            tvEmail = itemView.findViewById(R.id.tvEmail);
-            btnEdit = itemView.findViewById(R.id.btnEdit);
-            btnDelete = itemView.findViewById(R.id.btnDelete);
+            tvName = itemView.findViewById(
+                    itemView.getContext().getResources().getIdentifier("tvName", "id", itemView.getContext().getPackageName()));
+            tvLogin = itemView.findViewById(
+                    itemView.getContext().getResources().getIdentifier("tvLogin", "id", itemView.getContext().getPackageName()));
+            tvRole = itemView.findViewById(
+                    itemView.getContext().getResources().getIdentifier("tvRole", "id", itemView.getContext().getPackageName()));
+            tvEmail = itemView.findViewById(
+                    itemView.getContext().getResources().getIdentifier("tvEmail", "id", itemView.getContext().getPackageName()));
+            btnEdit = itemView.findViewById(
+                    itemView.getContext().getResources().getIdentifier("btnEdit", "id", itemView.getContext().getPackageName()));
+            btnDelete = itemView.findViewById(
+                    itemView.getContext().getResources().getIdentifier("btnDelete", "id", itemView.getContext().getPackageName()));
         }
     }
 }

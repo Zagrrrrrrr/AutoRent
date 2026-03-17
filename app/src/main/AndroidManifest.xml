@@ -34,6 +34,9 @@
         <activity android:name="com.example.autorentnew.activities.ManagerPopularCarsActivity" />
         <activity android:name="com.example.autorentnew.activities.ManagerProfitActivity" />
         <activity android:name="com.example.autorentnew.activities.RegisterActivity" />
+        <activity android:name="com.example.autorentnew.activities.SelectBookingActivity" />
+        <activity android:name="com.example.autorentnew.activities.AdminEditCarActivity" />
+        <activity android:name="com.example.autorentnew.activities.AdminEditUserActivity" />
 
     </application>
 

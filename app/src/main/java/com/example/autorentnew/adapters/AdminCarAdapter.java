@@ -1,27 +1,24 @@
 package com.example.autorentnew.adapters;
 
-
-
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.autorent.R;
+import com.example.autorentnew.activities.AdminEditCarActivity;
 import com.example.autorentnew.models.Car;
-
-import java.util.List;
 
 public class AdminCarAdapter extends RecyclerView.Adapter<AdminCarAdapter.CarViewHolder> {
 
     private Context context;
-    private List<Car> carList;
+    private java.util.List<Car> carList;
     private OnCarActionListener listener;
 
     public interface OnCarActionListener {
@@ -29,7 +26,7 @@ public class AdminCarAdapter extends RecyclerView.Adapter<AdminCarAdapter.CarVie
         void onDeleteClick(Car car);
     }
 
-    public AdminCarAdapter(Context context, List<Car> carList, OnCarActionListener listener) {
+    public AdminCarAdapter(Context context, java.util.List<Car> carList, OnCarActionListener listener) {
         this.context = context;
         this.carList = carList;
         this.listener = listener;
@@ -38,7 +35,9 @@ public class AdminCarAdapter extends RecyclerView.Adapter<AdminCarAdapter.CarVie
     @NonNull
     @Override
     public CarViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.item_admin_car, parent, false);
+        View view = LayoutInflater.from(context).inflate(
+                context.getResources().getIdentifier("item_admin_car", "layout", context.getPackageName()),
+                parent, false);
         return new CarViewHolder(view);
     }
 
@@ -51,14 +50,26 @@ public class AdminCarAdapter extends RecyclerView.Adapter<AdminCarAdapter.CarVie
         holder.tvEngine.setText(String.format("%.1f л. %s", car.getEngineVolume(), car.getEngineType()));
         holder.tvPrice.setText((int)car.getPricePerDay() + "$/сутки");
         holder.tvStatus.setText(car.isAvailable() ? "Доступен" : "Забронирован");
-        holder.tvStatus.setTextColor(car.isAvailable() ?
-                context.getColor(android.R.color.holo_green_dark) :
-                context.getColor(android.R.color.holo_red_dark));
+
+        // Загружаем картинку
+        String imageName = car.getImageUrl();
+        if (imageName != null && !imageName.isEmpty()) {
+            int resId = context.getResources().getIdentifier(imageName, "drawable", context.getPackageName());
+            if (resId != 0) {
+                holder.ivCarImage.setImageResource(resId);
+            } else {
+                holder.ivCarImage.setImageResource(
+                        context.getResources().getIdentifier("ic_car_placeholder", "drawable", context.getPackageName()));
+            }
+        } else {
+            holder.ivCarImage.setImageResource(
+                    context.getResources().getIdentifier("ic_car_placeholder", "drawable", context.getPackageName()));
+        }
 
         holder.btnEdit.setOnClickListener(v -> {
-            if (listener != null) {
-                listener.onEditClick(car);
-            }
+            Intent intent = new Intent(context, AdminEditCarActivity.class);
+            intent.putExtra("car_id", car.getId());
+            context.startActivity(intent);
         });
 
         holder.btnDelete.setOnClickListener(v -> {
@@ -74,20 +85,28 @@ public class AdminCarAdapter extends RecyclerView.Adapter<AdminCarAdapter.CarVie
     }
 
     public static class CarViewHolder extends RecyclerView.ViewHolder {
-        CardView cardView;
+        ImageView ivCarImage;
         TextView tvName, tvYear, tvEngine, tvPrice, tvStatus;
         Button btnEdit, btnDelete;
 
         public CarViewHolder(@NonNull View itemView) {
             super(itemView);
-            cardView = (CardView) itemView;
-            tvName = itemView.findViewById(R.id.tvName);
-            tvYear = itemView.findViewById(R.id.tvYear);
-            tvEngine = itemView.findViewById(R.id.tvEngine);
-            tvPrice = itemView.findViewById(R.id.tvPrice);
-            tvStatus = itemView.findViewById(R.id.tvStatus);
-            btnEdit = itemView.findViewById(R.id.btnEdit);
-            btnDelete = itemView.findViewById(R.id.btnDelete);
+            ivCarImage = itemView.findViewById(
+                    itemView.getContext().getResources().getIdentifier("ivCarImage", "id", itemView.getContext().getPackageName()));
+            tvName = itemView.findViewById(
+                    itemView.getContext().getResources().getIdentifier("tvName", "id", itemView.getContext().getPackageName()));
+            tvYear = itemView.findViewById(
+                    itemView.getContext().getResources().getIdentifier("tvYear", "id", itemView.getContext().getPackageName()));
+            tvEngine = itemView.findViewById(
+                    itemView.getContext().getResources().getIdentifier("tvEngine", "id", itemView.getContext().getPackageName()));
+            tvPrice = itemView.findViewById(
+                    itemView.getContext().getResources().getIdentifier("tvPrice", "id", itemView.getContext().getPackageName()));
+            tvStatus = itemView.findViewById(
+                    itemView.getContext().getResources().getIdentifier("tvStatus", "id", itemView.getContext().getPackageName()));
+            btnEdit = itemView.findViewById(
+                    itemView.getContext().getResources().getIdentifier("btnEdit", "id", itemView.getContext().getPackageName()));
+            btnDelete = itemView.findViewById(
+                    itemView.getContext().getResources().getIdentifier("btnDelete", "id", itemView.getContext().getPackageName()));
         }
     }
 }

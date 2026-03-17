@@ -1,7 +1,5 @@
 package com.example.autorentnew.activities;
 
-
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -40,7 +38,6 @@ public class CarDetailActivity extends AppCompatActivity {
         dbHelper = new DatabaseHelper(this);
         sessionManager = new SessionManager(this);
 
-        // Получаем ID машины из Intent
         int carId = getIntent().getIntExtra("car_id", -1);
         if (carId == -1) {
             Toast.makeText(this, "Ошибка загрузки данных", Toast.LENGTH_SHORT).show();
@@ -48,7 +45,6 @@ public class CarDetailActivity extends AppCompatActivity {
             return;
         }
 
-        // Загружаем машину из БД
         car = dbHelper.getCarById(carId);
         if (car == null) {
             Toast.makeText(this, "Автомобиль не найден", Toast.LENGTH_SHORT).show();
@@ -62,7 +58,7 @@ public class CarDetailActivity extends AppCompatActivity {
     }
 
     private void initViews() {
-        ivCarImage = findViewById(R.id.ivCarImage);
+        ivCarImage = findViewById(R.id.ivCarDetailImage);
         tvCarName = findViewById(R.id.tvCarName);
         tvYear = findViewById(R.id.tvYear);
         tvEngine = findViewById(R.id.tvEngine);
@@ -82,21 +78,30 @@ public class CarDetailActivity extends AppCompatActivity {
         tvPricePerDay.setText((int)car.getPricePerDay() + "$/сутки");
         tvPricePerWeek.setText((int)car.getPricePerWeek() + "$/неделя");
 
-        // Заглушка для описания (потом можно добавить в БД)
+        // Загружаем картинку
+        String imageName = car.getImageUrl();
+        if (imageName != null && !imageName.isEmpty()) {
+            int resId = getResources().getIdentifier(imageName, "drawable", getPackageName());
+            if (resId != 0) {
+                ivCarImage.setImageResource(resId);
+            } else {
+                ivCarImage.setImageResource(R.drawable.ic_car_placeholder);
+            }
+        } else {
+            ivCarImage.setImageResource(R.drawable.ic_car_placeholder);
+        }
+
         tvDescription.setText("Автомобиль в отличном состоянии. Полная комплектация. " +
                 "Климат-контроль, кожаный салон, парктроники, камера заднего вида.");
     }
 
     private void setupListeners() {
         btnBook.setOnClickListener(v -> {
-            // Проверяем, залогинен ли пользователь
             if (!sessionManager.isLoggedIn()) {
                 Toast.makeText(this, "Необходимо войти в систему", Toast.LENGTH_SHORT).show();
                 startActivity(new Intent(this, LoginActivity.class));
                 return;
             }
-
-            // Создаем бронирование
             createBooking();
         });
 
@@ -107,16 +112,13 @@ public class CarDetailActivity extends AppCompatActivity {
         try {
             int userId = sessionManager.getUserId();
 
-            // Бронируем на 3 дня
             int days = 3;
             double totalPrice = car.getPricePerDay() * days;
 
-            // Форматируем даты
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
             String startDate = sdf.format(new Date());
             String endDate = sdf.format(new Date(new Date().getTime() + days * 86400000L));
 
-            // Создаем бронирование
             Booking booking = new Booking(
                     0,
                     car.getId(),

@@ -2,7 +2,6 @@ package com.example.autorentnew.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -12,45 +11,31 @@ import com.example.autorentnew.utils.SessionManager;
 
 public class MainActivity extends AppCompatActivity {
 
-    private Button btnUserLogin, btnAdminLogin, btnManagerLogin, btnUserRegister;
+    private Button btnLogin, btnRegister;
     private SessionManager sessionManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        this.deleteDatabase("autorent.db"); // ВРЕМЕННО!
         sessionManager = new SessionManager(this);
 
+        // Если уже есть сессия — сразу кидаем в нужный экран
         if (sessionManager.isLoggedIn()) {
             redirectToRoleScreen();
             return;
         }
 
-        btnUserLogin = findViewById(R.id.btnUserLogin);
-        btnAdminLogin = findViewById(R.id.btnAdminLogin);
-        btnManagerLogin = findViewById(R.id.btnManagerLogin);
-        btnUserRegister = findViewById(R.id.btnUserRegister);
+        btnLogin = findViewById(R.id.btnLogin);
+        btnRegister = findViewById(R.id.btnRegister);
 
-        btnUserLogin.setOnClickListener(v -> {
+        btnLogin.setOnClickListener(v -> {
             Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-            intent.putExtra("role", "user");
             startActivity(intent);
         });
 
-        btnAdminLogin.setOnClickListener(v -> {
-            Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-            intent.putExtra("role", "admin");
-            startActivity(intent);
-        });
-
-        btnManagerLogin.setOnClickListener(v -> {
-            Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-            intent.putExtra("role", "manager");
-            startActivity(intent);
-        });
-
-        btnUserRegister.setOnClickListener(v -> {
+        btnRegister.setOnClickListener(v -> {
             Intent intent = new Intent(MainActivity.this, RegisterActivity.class);
             startActivity(intent);
         });
@@ -60,14 +45,17 @@ public class MainActivity extends AppCompatActivity {
         String role = sessionManager.getUserRole();
         Intent intent;
 
-        if (role.equals("admin")) {
-            intent = new Intent(MainActivity.this, AdminMainActivity.class);
-        } else if (role.equals("manager")) {
-            intent = new Intent(MainActivity.this, ManagerMainActivity.class);
-        } else {
-            intent = new Intent(MainActivity.this, UserMainActivity.class);
+        switch (role) {
+            case "admin":
+                intent = new Intent(MainActivity.this, AdminMainActivity.class);
+                break;
+            case "manager":
+                intent = new Intent(MainActivity.this, ManagerMainActivity.class);
+                break;
+            default: // user
+                intent = new Intent(MainActivity.this, UserMainActivity.class);
+                break;
         }
-
         startActivity(intent);
         finish();
     }

@@ -1,20 +1,18 @@
 package com.example.autorentnew.adapters;
 
-
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.autorent.R;
-import com.example.autorentnew.activities.CarDetailActivity;
+import com.example.autorentnew.activities.SelectBookingActivity;
 import com.example.autorentnew.models.Car;
 
 import java.util.List;
@@ -38,7 +36,9 @@ public class CarAdapter extends RecyclerView.Adapter<CarAdapter.CarViewHolder> {
     @NonNull
     @Override
     public CarViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.item_car, parent, false);
+        View view = LayoutInflater.from(context).inflate(
+                context.getResources().getIdentifier("item_car", "layout", context.getPackageName()),
+                parent, false);
         return new CarViewHolder(view);
     }
 
@@ -48,17 +48,29 @@ public class CarAdapter extends RecyclerView.Adapter<CarAdapter.CarViewHolder> {
 
         holder.tvCarName.setText(car.getBrand() + " " + car.getModel());
         holder.tvYear.setText(car.getYear() + " г.в");
-        holder.tvEngine.setText(String.format("%.1f л. %s", car.getEngineVolume(), car.getEngineType()));
         holder.tvPricePerDay.setText((int)car.getPricePerDay() + "$/сутки");
 
-        // Клик по всей карточке - открываем детали
-        holder.cardView.setOnClickListener(v -> {
-            Intent intent = new Intent(context, CarDetailActivity.class);
+        // Загружаем картинку
+        String imageName = car.getImageUrl();
+        if (imageName != null && !imageName.isEmpty()) {
+            int resId = context.getResources().getIdentifier(imageName, "drawable", context.getPackageName());
+            if (resId != 0) {
+                holder.ivCarImage.setImageResource(resId);
+            } else {
+                holder.ivCarImage.setImageResource(
+                        context.getResources().getIdentifier("ic_car_placeholder", "drawable", context.getPackageName()));
+            }
+        } else {
+            holder.ivCarImage.setImageResource(
+                    context.getResources().getIdentifier("ic_car_placeholder", "drawable", context.getPackageName()));
+        }
+
+        holder.itemView.setOnClickListener(v -> {
+            Intent intent = new Intent(context, SelectBookingActivity.class);
             intent.putExtra("car_id", car.getId());
             context.startActivity(intent);
         });
 
-        // Клик по кнопке бронирования
         holder.btnBook.setOnClickListener(v -> {
             if (listener != null) {
                 listener.onBookClick(car);
@@ -72,18 +84,22 @@ public class CarAdapter extends RecyclerView.Adapter<CarAdapter.CarViewHolder> {
     }
 
     public static class CarViewHolder extends RecyclerView.ViewHolder {
-        CardView cardView;
-        TextView tvCarName, tvYear, tvEngine, tvPricePerDay;
+        ImageView ivCarImage;
+        TextView tvCarName, tvYear, tvPricePerDay;
         Button btnBook;
 
         public CarViewHolder(@NonNull View itemView) {
             super(itemView);
-            cardView = (CardView) itemView;
-            tvCarName = itemView.findViewById(R.id.tvCarName);
-            tvYear = itemView.findViewById(R.id.tvYear);
-            tvEngine = itemView.findViewById(R.id.tvEngine);
-            tvPricePerDay = itemView.findViewById(R.id.tvPricePerDay);
-            btnBook = itemView.findViewById(R.id.btnBook);
+            ivCarImage = itemView.findViewById(
+                    itemView.getContext().getResources().getIdentifier("ivCarImage", "id", itemView.getContext().getPackageName()));
+            tvCarName = itemView.findViewById(
+                    itemView.getContext().getResources().getIdentifier("tvCarName", "id", itemView.getContext().getPackageName()));
+            tvYear = itemView.findViewById(
+                    itemView.getContext().getResources().getIdentifier("tvYear", "id", itemView.getContext().getPackageName()));
+            tvPricePerDay = itemView.findViewById(
+                    itemView.getContext().getResources().getIdentifier("tvPricePerDay", "id", itemView.getContext().getPackageName()));
+            btnBook = itemView.findViewById(
+                    itemView.getContext().getResources().getIdentifier("btnBook", "id", itemView.getContext().getPackageName()));
         }
     }
 }

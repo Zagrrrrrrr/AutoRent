@@ -1,7 +1,5 @@
 package com.example.autorentnew.models;
 
-
-
 public class Car {
     private int id;
     private String brand;
@@ -15,6 +13,7 @@ public class Car {
     private boolean isAvailable;
     private String imageUrl;
 
+    // Constructor
     public Car(int id, String brand, String model, int year, double engineVolume,
                String engineType, double pricePerHour, double pricePerDay,
                double pricePerWeek, boolean isAvailable, String imageUrl) {
@@ -31,6 +30,7 @@ public class Car {
         this.imageUrl = imageUrl;
     }
 
+    // Getters
     public int getId() { return id; }
     public String getBrand() { return brand; }
     public String getModel() { return model; }
@@ -42,4 +42,17 @@ public class Car {
     public double getPricePerWeek() { return pricePerWeek; }
     public boolean isAvailable() { return isAvailable; }
     public String getImageUrl() { return imageUrl; }
+
+    // Setters
+    public void setId(int id) { this.id = id; }
+    public void setBrand(String brand) { this.brand = brand; }
+    public void setModel(String model) { this.model = model; }
+    public void setYear(int year) { this.year = year; }
+    public void setEngineVolume(double engineVolume) { this.engineVolume = engineVolume; }
+    public void setEngineType(String engineType) { this.engineType = engineType; }
+    public void setPricePerHour(double pricePerHour) { this.pricePerHour = pricePerHour; }
+    public void setPricePerDay(double pricePerDay) { this.pricePerDay = pricePerDay; }
+    public void setPricePerWeek(double pricePerWeek) { this.pricePerWeek = pricePerWeek; }
+    public void setAvailable(boolean available) { isAvailable = available; }
+    public void setImageUrl(String imageUrl) { this.imageUrl = imageUrl; }
 }

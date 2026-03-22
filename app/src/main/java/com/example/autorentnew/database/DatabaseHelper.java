@@ -415,26 +415,59 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         List<CarStat> stats = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
 
-        String query = "SELECT c." + COLUMN_BRAND + ", c." + COLUMN_MODEL + ", " +
-                "COUNT(b." + COLUMN_ID + ") as booking_count " +
-                "FROM " + TABLE_BOOKINGS + " b " +
-                "JOIN " + TABLE_CARS + " c ON b." + COLUMN_CAR_ID + " = c." + COLUMN_ID + " " +
-                "WHERE b." + COLUMN_CREATED_AT + " BETWEEN ? AND ? " +
-                "GROUP BY c." + COLUMN_ID + " " +
-                "ORDER BY booking_count DESC";
+        try {
+            String query = "SELECT c." + COLUMN_BRAND + ", c." + COLUMN_MODEL + ", " +
+                    "COUNT(b." + COLUMN_ID + ") as booking_count " +
+                    "FROM " + TABLE_BOOKINGS + " b " +
+                    "JOIN " + TABLE_CARS + " c ON b." + COLUMN_CAR_ID + " = c." + COLUMN_ID + " " +
+                    "WHERE b." + COLUMN_CREATED_AT + " BETWEEN ? AND ? " +
+                    "GROUP BY c." + COLUMN_ID + " " +
+                    "ORDER BY booking_count DESC";
 
-        Cursor cursor = db.rawQuery(query, new String[]{startDate, endDate});
+            Cursor cursor = db.rawQuery(query, new String[]{startDate, endDate});
 
-        while (cursor.moveToNext()) {
-            CarStat stat = new CarStat();
-            stat.setBrand(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_BRAND)));
-            stat.setModel(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_MODEL)));
-            stat.setBookingCount(cursor.getInt(cursor.getColumnIndexOrThrow("booking_count")));
-            stats.add(stat);
+            while (cursor.moveToNext()) {
+                CarStat stat = new CarStat();
+                stat.setBrand(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_BRAND)));
+                stat.setModel(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_MODEL)));
+                stat.setBookingCount(cursor.getInt(cursor.getColumnIndexOrThrow("booking_count")));
+                stats.add(stat);
+            }
+            cursor.close();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        cursor.close();
+
         return stats;
     }
+    public List<Booking> getAllBookings() {
+        List<Booking> bookingList = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        try {
+            Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_BOOKINGS + " ORDER BY " + COLUMN_ID + " DESC", null);
+
+            while (cursor.moveToNext()) {
+                Booking booking = new Booking(
+                        cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_ID)),
+                        cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_CAR_ID)),
+                        cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_USER_ID)),
+                        cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_START_DATE)),
+                        cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_END_DATE)),
+                        cursor.getDouble(cursor.getColumnIndexOrThrow(COLUMN_TOTAL_PRICE)),
+                        cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_STATUS)),
+                        cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_CREATED_AT))
+                );
+                bookingList.add(booking);
+            }
+            cursor.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return bookingList;
+    }
+
 
     public double getTotalProfit() {
         SQLiteDatabase db = this.getReadableDatabase();
@@ -451,17 +484,24 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public double getProfitByPeriod(String startDate, String endDate) {
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT SUM(" + COLUMN_TOTAL_PRICE + ") FROM " + TABLE_BOOKINGS +
-                        " WHERE " + COLUMN_CREATED_AT + " BETWEEN ? AND ?",
-                new String[]{startDate, endDate});
+        double total = 0;
 
-        if (cursor.moveToFirst()) {
-            double total = cursor.getDouble(0);
+        try {
+            // Используем COLUMN_CREATED_AT, а не COLUMN_START_DATE
+            String query = "SELECT SUM(" + COLUMN_TOTAL_PRICE + ") FROM " + TABLE_BOOKINGS +
+                    " WHERE " + COLUMN_CREATED_AT + " BETWEEN ? AND ?";
+
+            Cursor cursor = db.rawQuery(query, new String[]{startDate, endDate});
+
+            if (cursor.moveToFirst()) {
+                total = cursor.getDouble(0);
+            }
             cursor.close();
-            return total;
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        cursor.close();
-        return 0;
+
+        return total;
     }
     // Добавь эти методы в класс DatabaseHelper
 

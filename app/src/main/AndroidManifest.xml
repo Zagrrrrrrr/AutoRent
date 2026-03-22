@@ -37,6 +37,8 @@
         <activity android:name="com.example.autorentnew.activities.SelectBookingActivity" />
         <activity android:name="com.example.autorentnew.activities.AdminEditCarActivity" />
         <activity android:name="com.example.autorentnew.activities.AdminEditUserActivity" />
+        <activity android:name="com.example.autorentnew.activities.ManagerPeriodStatsActivity" />
+        <activity android:name="com.example.autorentnew.activities.DebugActivity" />
 
     </application>
 

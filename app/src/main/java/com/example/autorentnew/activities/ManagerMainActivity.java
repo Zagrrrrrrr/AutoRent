@@ -37,9 +37,12 @@ public class ManagerMainActivity extends AppCompatActivity {
                 startActivity(new Intent(ManagerMainActivity.this, ManagerProfitActivity.class))
         );
 
-        btnCalendar.setOnClickListener(v ->
-                Toast.makeText(this, "Календарь (в разработке)", Toast.LENGTH_SHORT).show()
-        );
+        // В методе onCreate найди кнопку btnCalendar и замени:
+
+        btnCalendar.setOnClickListener(v -> {
+            Intent intent = new Intent(ManagerMainActivity.this, ManagerPeriodStatsActivity.class);
+            startActivity(intent);
+        });
 
         btnLogout.setOnClickListener(v -> {
             sessionManager.logout();

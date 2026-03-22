@@ -38,7 +38,7 @@
         android:layout_width="match_parent"
         android:layout_height="56dp"
         android:text="Статистика за период"
-        android:backgroundTint="@color/teal_700"
+        android:backgroundTint="#018786"
         android:layout_marginBottom="24dp" />
 
     <Button

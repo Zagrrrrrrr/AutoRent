@@ -6,7 +6,6 @@ import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.autorent.R;
 import com.example.autorentnew.utils.SessionManager;
 
 public class MainActivity extends AppCompatActivity {
@@ -17,18 +16,17 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        this.deleteDatabase("autorent.db"); // ВРЕМЕННО!
+        setContentView(getResources().getIdentifier("activity_main", "layout", getPackageName()));
+
         sessionManager = new SessionManager(this);
 
-        // Если уже есть сессия — сразу кидаем в нужный экран
         if (sessionManager.isLoggedIn()) {
             redirectToRoleScreen();
             return;
         }
 
-        btnLogin = findViewById(R.id.btnLogin);
-        btnRegister = findViewById(R.id.btnRegister);
+        btnLogin = findViewById(getResources().getIdentifier("btnLogin", "id", getPackageName()));
+        btnRegister = findViewById(getResources().getIdentifier("btnRegister", "id", getPackageName()));
 
         btnLogin.setOnClickListener(v -> {
             Intent intent = new Intent(MainActivity.this, LoginActivity.class);
@@ -52,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
             case "manager":
                 intent = new Intent(MainActivity.this, ManagerMainActivity.class);
                 break;
-            default: // user
+            default:
                 intent = new Intent(MainActivity.this, UserMainActivity.class);
                 break;
         }
